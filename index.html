@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Free Fire Likes Checker</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #111; color: #fff; }
+    .container { margin-top: 50px; }
+    input { padding: 10px; width: 200px; border-radius: 5px; border: none; }
+    button { padding: 10px 20px; margin-top: 10px; background: #ff4757; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .result { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Free Fire Likes Checker</h1>
+    <input type="text" id="uid" placeholder="Enter UID" />
+    <br />
+    <button onclick="getLikes()">Get Likes</button>
+    <div class="result" id="result"></div>
+  </div>
+  
+  <script>
+    async function getLikes() {
+      const uid = document.getElementById("uid").value;
+      if (!uid) return alert("Please enter a UID");
+
+      const res = await fetch(`/api/likes/${uid}`);
+      const data = await res.json();
+
+      document.getElementById("result").innerHTML = `
+        <p>Status: ${data.status}</p>
+        <p>UID: ${data.uid}</p>
+        <p>Likes: ${data.likes}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
