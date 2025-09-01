@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sheikh FF Likes</title>
+</head>
+<body style="text-align:center;background:#111;color:#fff;font-family:sans-serif;">
+  <h1>Sheikh FF Likes</h1>
+  <input type="text" id="uid" placeholder="Enter UID" />
+  <select id="region">
+    <option value="PK">PK</option>
+    <option value="BD">BD</option>
+    <option value="IND">IND</option>
+    <option value="BR">BR</option>
+  </select>
+  <button onclick="sendLikes()">Send 100 Likes</button>
+  <pre id="response"></pre>
+
+  <script>
+    const API_BASE = '/api/likes';
+    async function sendLikes() {
+      const uid = document.getElementById('uid').value;
+      const region = document.getElementById('region').value;
+      const resBox = document.getElementById('response');
+      resBox.textContent = 'Loading...';
+      try {
+        const res = await fetch(`${API_BASE}?uid=${uid}&region=${region}`);
+        const data = await res.json();
+        resBox.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        resBox.textContent = `Error: ${err.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
