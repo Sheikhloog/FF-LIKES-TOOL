@@ -1,65 +1,206 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html lang="ur">
 <head>
-  <meta charset="UTF-8">
-  <title>Claim 100 Free Fire Likes</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free Fire Likes Tool</title>
   <style>
-    body { font-family: sans-serif; background:#111; color:#eee; padding:20px; }
-    .container { max-width: 480px; margin: auto; }
-    h1 { text-align:center; margin-bottom:10px; }
-    p.lead { font-size:14px; margin-bottom:20px; text-align:center; color:#ccc; }
-    input, button { width:100%; padding:10px; margin-bottom:12px; border-radius:5px; border: none; }
-    input { background:#222; color:#fff; }
-    button { background:#ff5c7a; color:#fff; font-size:16px; cursor:pointer; }
-    .claim-list { margin-top:20px; background:#222; padding:10px; border-radius:5px; max-height:200px; overflow-y:auto; }
-    .claim-item { padding:6px 0; border-bottom:1px solid #333; }
-    .claim-item:last-child { border-bottom:none; }
-    .loading { text-align:center; color:#ffdd57; margin:12px 0; display:none; }
-    .footer { font-size:12px; color:#777; margin-top:20px; text-align:center; }
+    :root {
+      --bg: #0f172a; /* slate-900 */
+      --card: #111827; /* gray-900 */
+      --muted: #94a3b8; /* slate-400 */
+      --text: #e5e7eb; /* gray-200 */
+      --accent: #22d3ee; /* cyan-400 */
+      --accent-2: #38bdf8; /* sky-400 */
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.15), transparent 60%),
+                  radial-gradient(800px 400px at 90% 10%, rgba(56,189,248,.12), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      display: grid; place-items: center; min-height: 100svh; padding: 24px;
+    }
+    .card {
+      width: min(680px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,0.2);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+    h1 { margin: 0 0 6px; font-size: clamp(22px, 4vw, 32px); letter-spacing: .5px; }
+    .sub { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+    label { display:block; margin: 14px 0 6px; font-weight: 600; }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.25);
+      background: #0b1220; color: var(--text);
+      outline: none;
+    }
+    input::placeholder { color: #64748b; }
+    button {
+      cursor: pointer; font-weight: 700; letter-spacing: .3px; margin-top: 14px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #001018; border: none; box-shadow: 0 6px 18px rgba(34,211,238,.25);
+      transition: transform .06s ease;
+    }
+    button:active { transform: translateY(1px); }
+    .row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 620px){ .row { grid-template-columns: 2fr 1fr; } }.note { margin-top: 10px; font-size: 13px; color: var(--muted); }
+.resp-wrap { margin-top: 16px; }
+.resp-label { font-weight: 700; margin-bottom: 8px; }
+pre {
+  margin: 0; padding: 14px; border-radius: 12px; background: #0a0f1c;
+  border: 1px solid rgba(148,163,184,0.2); overflow-x: auto; white-space: pre-wrap;
+}
+.err { color: #fecaca; }
+.ok  { color: #bbf7d0; }
+.muted { color: var(--muted); }
+.footer { margin-top: 16px; font-size: 12px; color: var(--muted); text-align: center; }
+
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Claim 100 Free Fire Likes</h1>
-    <p class="lead">Enter your UID below and pass verification, then claim your likes instantly!</p>
+  <main class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Free Fire Likes Tool</h1>
+    <p class="sub">powered by <strong>sheikh zada</strong></p><form id="likeForm" novalidate>
+  <label for="uid">UID درج کریں</label>
+  <input id="uid" name="uid" type="text" inputmode="numeric" pattern="[0-9]+" placeholder="مثال: 2955590815" required />
 
-    <input id="uid" type="text" placeholder="Enter Free Fire UID" />
-
-    <!-- Human verification placeholder -->
-    <div id="verification" style="margin-bottom:12px; text-align:center;">
-      <!-- Insert Turnstile widget or dummy checkbox -->
-      <button onclick="document.getElementById('verification').innerHTML = 'Verified ✓';">I'm human</button>
+  <div class="row">
+    <div>
+      <label for="region">سرور (Region) منتخب کریں</label>
+      <select id="region" name="region" required>
+        <option value="" selected disabled>— Region منتخب کریں —</option>
+        <option>PK</option>
+        <option>BD</option>
+        <option>IND</option>
+        <option>SG</option>
+        <option>ID</option>
+        <option>BR</option>
+        <option>ME</option>
+        <option>NA</option>
+        <option>US</option>
+        <option>EU</option>
+        <option>RU</option>
+        <option>VN</option>
+        <option>TH</option>
+        <option>MY</option>
+        <option>TW</option>
+        <option>JP</option>
+      </select>
     </div>
-
-    <button id="claimBtn">Claim Free Likes</button>
-
-    <div id="loading" class="loading">Processing... Please wait 30 seconds.</div>
-
-    <div class="claim-list" id="claims">
-      <!-- Recent claims will load here -->
-      <div class="claim-item">9052181635 – NAFIS – 98 likes</div>
-      <div class="claim-item">2139466497 – BD乂LEGEND亗 – 100 likes</div>
-      <!-- etc. -->
+    <div>
+      <label for="amount">Likes کی تعداد</label>
+      <input id="amount" name="amount" type="number" min="1" max="100" value="100" />
     </div>
-
-    <div class="footer">Note: Each UID can claim likes once per 24 hours.</div>
   </div>
 
-  <script>
-    document.getElementById('claimBtn').addEventListener('click', async () => {
+  <button id="submitBtn" type="submit">Submit</button>
+  <div id="hint" class="note">نوٹ: ہر UID پر 24 گھنٹے میں صرف ایک بار کلَیم کیا جا سکتا ہے۔</div>
+</form>
+
+<div class="resp-wrap">
+  <div class="resp-label">Response</div>
+  <pre id="responseBox" class="muted">ابھی تک کوئی رِسپانس نہیں آیا۔</pre>
+</div>
+
+<div class="footer">یہ ایک سادہ فرنٹ اینڈ ہے جو تھرڈ پارٹی API کو کال کرتا ہے۔ اگر رِسپانس نظر نہ آئے تو ممکن ہے CORS یا سرور کی پابندی ہو۔</div>
+
+  </main>  <script>
+    const form = document.getElementById('likeForm');
+    const responseBox = document.getElementById('responseBox');
+    const submitBtn = document.getElementById('submitBtn');
+    const hint = document.getElementById('hint');
+
+    function buildUrl(uid, region, amount = 100) {
+      const base = 'https://likes.ffgarena.cloud/api/v2/likes';
+      const params = new URLSearchParams({
+        uid: String(uid).trim(),
+        amount_of_likes: String(amount || 100),
+        auth: 'trial-7d',
+        region: String(region).trim(),
+      });
+      return `${base}?${params.toString()}`;
+    }
+
+    function show(text, type = 'muted') {
+      responseBox.className = type;
+      responseBox.textContent = typeof text === 'string' ? text : JSON.stringify(text, null, 2);
+    }
+
+    async function fetchWithTimeout(resource, options = {}) {
+      const { timeout = 15000 } = options;
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      try {
+        const res = await fetch(resource, { ...options, signal: controller.signal });
+        clearTimeout(id);
+        return res;
+      } catch (err) {
+        clearTimeout(id);
+        throw err;
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
       const uid = document.getElementById('uid').value.trim();
-      if (!uid) return alert('Enter your UID');
+      const region = document.getElementById('region').value;
+      const amount = Math.min(100, Math.max(1, Number(document.getElementById('amount').value || 100)));
 
-      document.getElementById('loading').style.display = 'block';
-      await new Promise(r => setTimeout(r, 3000));  // simulate wait
-      document.getElementById('loading').style.display = 'none';
+      if (!uid || !/^[0-9]{4,}$/.test(uid)) {
+        show('براہ کرم درست عددی UID درج کریں (کم ازکم 4 ہندسے).', 'err');
+        return;
+      }
+      if (!region) {
+        show('براہ کرم Region منتخب کریں۔', 'err');
+        return;
+      }
 
-      // Mock response
-      const newItem = document.createElement('div');
-      newItem.className = 'claim-item';
-      newItem.textContent = uid + ' – YOURNAME – 100 likes';
-      document.getElementById('claims').prepend(newItem);
+      const url = buildUrl(uid, region, amount);
+      show('Request بھیجی جا رہی ہے… براہ کرم انتظار کریں۔');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing…';
+
+      try {
+        // براہ راست کال
+        let res = await fetchWithTimeout(url, { method: 'GET' });
+
+        // اگر CORS بلاک کرے تو یوزر کو واضح بتائیں
+        if (!res.ok) {
+          const text = await res.text().catch(() => '');
+          try {
+            const maybeJson = JSON.parse(text);
+            show(maybeJson, res.status >= 400 ? 'err' : 'ok');
+          } catch {
+            show(`HTTP ${res.status}: ${text || 'سرور سے مسئلہ آیا ہے۔'}`, 'err');
+          }
+          return;
+        }
+
+        // کامیاب
+        const data = await res.json().catch(async () => ({ raw: await res.text() }));
+        // کچھ responses میں likes_antes/likes_depois/ sent ہوتے ہیں — بس ویسے ہی دکھا دیں
+        show(data, 'ok');
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          show('ریکویسٹ ٹائم آؤٹ ہو گئی۔ نیٹ ورک چیک کریں اور دوبارہ کوشش کریں۔', 'err');
+        } else if (String(err).includes('Failed to fetch')) {
+          show('براہ راست کال بلاک ہو رہی ہے (ممکنہ CORS مسئلہ). اس صفحہ کو کسی ایسے ہوسٹنگ پر رکھیں جہاں بیک اینڈ پراکسی ہو، یا پھر موبائل/ڈیسک ٹاپ ایپ/سرور سے کال کریں۔', 'err');
+        } else {
+          show('Error: ' + err.message, 'err');
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+      }
     });
-  </script>
-</body>
+  </script></body>
 </html>
