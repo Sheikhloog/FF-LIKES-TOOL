@@ -15,4 +15,120 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      backgroun...
+      background: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.15), transparent 60%),
+                  radial-gradient(800px 400px at 90% 10%, rgba(56,189,248,.12), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial;
+      display: grid; place-items: center; min-height: 100vh; padding: 24px;
+    }
+    .card {
+      width: min(680px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,0.2);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+    h1 { margin: 0 0 6px; font-size: clamp(22px, 4vw, 32px); letter-spacing: .5px; }
+    .sub { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+    label { display:block; margin: 14px 0 6px; font-weight: 600; }
+    input, button, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.25);
+      background: #0b1220; color: var(--text);
+      outline: none;
+    }
+    input::placeholder { color: #64748b; }
+    button {
+      cursor: pointer; font-weight: 700; letter-spacing: .3px; margin-top: 14px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #001018; border: none; box-shadow: 0 6px 18px rgba(34,211,238,.25);
+      transition: transform .06s ease;
+    }
+    button:active { transform: translateY(1px); }
+    .note { margin-top: 10px; font-size: 13px; color: var(--muted); }
+    .resp-wrap { margin-top: 16px; }
+    .resp-label { font-weight: 700; margin-bottom: 8px; }
+    pre {
+      margin: 0; padding: 14px; border-radius: 12px; background: #0a0f1c;
+      border: 1px solid rgba(148,163,184,0.2); overflow-x: auto; white-space: pre-wrap;
+    }
+    .err { color: #fecaca; }
+    .ok  { color: #bbf7d0; }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Free Fire Likes Tool</h1>
+    <p class="sub">powered by <strong>sheikh zada</strong></p><form id="likeForm">
+  <label for="uid">Enter UID</label>
+  <input id="uid" name="uid" type="text" placeholder="e.g. 2955590815" required />
+  <button id="submitBtn" type="submit">Submit</button>
+  <div id="hint" class="note">Note: Each UID can claim only once every 24 hours</div>
+</form>
+
+<div class="resp-wrap">
+  <div class="resp-label">Response</div>
+  <pre id="responseBox" class="muted">No response yet.</pre>
+</div>
+
+  </main>  <script>
+    const form = document.getElementById('likeForm');
+    const responseBox = document.getElementById('responseBox');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function buildUrl(uid, amount) {
+      const base = 'https://likes.ffgarena.cloud/api/v2/likes';
+      const params = new URLSearchParams({
+        uid: uid.trim(),
+        amount_of_likes: amount,
+        auth: 'trial-7d',
+        region: 'PK',
+      });
+      return `${base}?${params.toString()}`;
+    }
+
+    function formatResponse(data) {
+      if (data.likes_antes !== undefined && data.likes_depois !== undefined) {
+        data.likes_already = data.likes_antes;
+        data.after = data.likes_depois;
+        delete data.likes_antes;
+        delete data.likes_depois;
+      }
+      return JSON.stringify(data, null, 2);
+    }
+
+    function show(text, type = 'muted') {
+      responseBox.className = type;
+      responseBox.textContent = typeof text === 'string' ? text : text;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const uid = document.getElementById('uid').value;
+      if (!uid) return show('Please enter a valid UID', 'err');
+
+      const likes = Math.floor(Math.random() * 6) + 95; // 95 to 100
+      const url = buildUrl(uid, likes);
+      show('Sending request...');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Processing…';
+
+      try {
+        let res = await fetch(url);
+        const data = await res.json();
+        show(formatResponse(data), res.ok ? 'ok' : 'err');
+      } catch (err) {
+        show('Error: ' + err.message, 'err');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+      }
+    });
+  </script></body>
+</html>
