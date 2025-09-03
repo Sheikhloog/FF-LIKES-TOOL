@@ -14,175 +14,254 @@
       --accent-2: #38bdf8;
       --danger: #ef4444;
       --success: #22c55e;
+      --glass: rgba(255,255,255,0.03);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
+    html,body{height:100%}
     body {
       margin: 0;
-      background: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.15), transparent 60%),
-                  radial-gradient(800px 400px at 90% 10%, rgba(56,189,248,.12), transparent 60%),
+      background: radial-gradient(800px 400px at 10% -10%, rgba(34,211,238,.08), transparent 60%),
+                  radial-gradient(600px 300px at 90% 10%, rgba(56,189,248,.06), transparent 60%),
                   var(--bg);
       color: var(--text);
-      font: 18px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial;
-      display: grid;
-      place-items: center;
-      min-height: 100vh;
-      padding: 24px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', Arial;
+      display: grid; place-items: center; padding: 24px;
+    }
+    .wrap {
+      width: min(720px, 100%);
+      padding: 22px;
     }
     .card {
-      width: min(500px, 100%);
-      background: var(--card);
-      border-radius: 20px;
-      padding: 28px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      text-align: center;
-    }
-    h1 { font-size: clamp(24px, 5vw, 36px); margin-bottom: 8px; letter-spacing: .5px; }
-    .sub { margin-bottom: 20px; color: var(--muted); font-size: 15px; }
-    label { display: block; margin: 16px 0 6px; font-weight: 600; }
-    input, button {
-      width: 100%;
-      padding: 14px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
       border-radius: 14px;
-      border: 1px solid rgba(148,163,184,0.3);
-      background: #0b1220;
-      color: var(--text);
-      outline: none;
-      font-size: 18px;
+      padding: 22px;
+      box-shadow: 0 12px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
     }
-    input::placeholder { color: #64748b; font-size: 16px; }
-    button {
-      cursor: pointer;
-      font-weight: 700;
-      margin-top: 18px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      color: #001018;
-      border: none;
-      box-shadow: 0 6px 20px rgba(34,211,238,.3);
-      transition: transform .06s ease;
+    header{display:flex;align-items:center;gap:14px}
+    .logo{
+      width:58px;height:58px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-weight:800;color:#001018
     }
-    button:active { transform: translateY(1px); }
-    button.loading { background: #0ea5e9; cursor: wait; }
+    h1{margin:0;font-size:20px}
+    .powered{color:var(--muted);font-size:13px;margin-top:4px}
 
-    /* Popup */
-    .popup-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      display: none; align-items: center; justify-content: center;
-      animation: fadeIn 0.3s ease forwards;
-      z-index: 1000;
+    form{margin-top:18px}
+    label{display:block;font-weight:600;margin:10px 0 6px}
+
+    .row{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:700px){.row{grid-template-columns:2fr 1fr}}
+
+    input, select, button{
+      width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);
+      background: #06111a;color:var(--text);outline:none;font-size:15px
     }
-    .popup {
-      background: var(--card);
-      padding: 24px;
-      border-radius: 18px;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.5);
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-      animation: scaleIn 0.3s ease forwards;
-      font-size: 18px;
+    input::placeholder{color:#7e8b98}
+
+    .select-wrap{position:relative}
+    select.opt {appearance:none;padding-right:36px}
+
+    .small {font-size:13px;color:var(--muted);margin-top:8px}
+
+    .btn {
+      margin-top:14px;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#001018;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer;position:relative;overflow:hidden
     }
-    .popup h2 { margin-bottom: 14px; font-size: 22px; }
-    .popup pre {
-      background: #0a0f1c;
-      padding: 16px;
-      border-radius: 12px;
-      white-space: pre-wrap;
-      text-align: justify;
-      font-size: 16px;
-      border: 1px solid rgba(148,163,184,0.25);
-      margin-bottom: 12px;
+    .btn:active{transform:translateY(1px)}
+
+    .spinner{width:18px;height:18px;border-radius:50%;border:3px solid rgba(0,0,0,0.15);border-top-color:rgba(255,255,255,0.9);animation:spin .9s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* popup */
+    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);visibility:hidden;opacity:0;transition:opacity .25s ease,visibility .25s}
+    .overlay.active{visibility:visible;opacity:1}
+    .dialog{background:linear-gradient(180deg,var(--card),rgba(255,255,255,0.01));padding:18px;border-radius:12px;max-width:560px;width:92%;box-shadow:0 10px 30px rgba(0,0,0,0.6);transform:translateY(-14px);opacity:0;transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .28s}
+    .overlay.active .dialog{transform:translateY(0);opacity:1}
+
+    .dialog h2{margin:0 0 10px;font-size:18px}
+    .msg{background:#05121b;border-radius:10px;padding:12px;font-size:15px;line-height:1.25;color:var(--text);border:1px solid rgba(255,255,255,0.03);text-align:left}
+    .msg.compact{font-size:14px;word-break:break-word;text-align:justify}
+
+    .dialog .actions{display:flex;justify-content:flex-end;margin-top:12px;gap:8px}
+    .dialog button.close{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);padding:8px 12px;border-radius:8px;cursor:pointer}
+    .dialog button.ok{background:linear-gradient(90deg,var(--success),#7be28a);color:#012006;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+
+    /* success check */
+    .check{width:72px;height:72px;border-radius:50%;background:linear-gradient(180deg,var(--success),#66d07b);display:grid;place-items:center;margin:0 auto 10px;box-shadow:0 8px 24px rgba(34,197,94,0.18)}
+    .check svg{width:44px;height:44px;fill:white}
+
+    footer{margin-top:14px;font-size:13px;color:var(--muted);text-align:center}
+
+    /* responsive tweaks */
+    @media(max-width:420px){
+      .dialog{padding:14px}
+      .msg{font-size:13px}
+      input,select,button{font-size:15px;padding:12px}
     }
-    .popup button {
-      margin-top: 12px;
-      background: var(--accent);
-      color: #001018;
-      font-size: 18px;
-    }
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-    @keyframes scaleIn { from {transform:scale(0.85);} to {transform:scale(1);} }
   </style>
 </head>
 <body>
-  <main class="card">
-    <h1>Free Fire Likes Tool</h1>
-    <p class="sub">powered by <strong>sheikh zada</strong></p>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="logo">FF</div>
+        <div>
+          <h1>Free Fire Likes Tool</h1>
+          <div class="powered">powered by <strong>sheikh zada</strong></div>
+        </div>
+      </header>
 
-    <form id="likeForm">
-      <label for="uid">Enter UID</label>
-      <input id="uid" name="uid" type="text" placeholder="e.g. 2955590815" required />
-      <button id="submitBtn" type="submit">Submit</button>
-    </form>
-  </main>
+      <form id="likeForm" autocomplete="off">
+        <label for="uid">Enter UID</label>
+        <input id="uid" name="uid" type="text" placeholder="e.g. 12345678" inputmode="numeric" pattern="[0-9]*" required />
 
-  <div class="popup-overlay" id="popupOverlay">
-    <div class="popup">
-      <h2 id="popupTitle">Response</h2>
-      <pre id="popupMessage"></pre>
-      <button id="closePopup">OK</button>
+        <div style="margin-top:8px">
+          <label for="region">Select Server</label>
+          <select id="region" class="opt" name="region">
+            <option value="PK">🇵🇰 Pakistan</option>
+            <option value="IN">🇮🇳 India</option>
+            <option value="NP">🇳🇵 Nepal</option>
+            <option value="BD">🇧🇩 Bangladesh</option>
+            <option value="BR">🇧🇷 Brazil</option>
+            <option value="SG">🇸🇬 Singapore</option>
+            <option value="ID">🇮🇩 Indonesia</option>
+            <option value="MY">🇲🇾 Malaysia</option>
+            <option value="TH">🇹🇭 Thailand</option>
+            <option value="US">🇺🇸 USA</option>
+            <option value="PH">🇵🇭 Philippines</option>
+            <option value="VN">🇻🇳 Vietnam</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <div></div>
+        </div>
+
+        <button id="submitBtn" class="btn" type="submit">
+          <span id="btnText">Submit</span>
+        </button>
+
+        <div class="small">Note: Each UID can claim only once every 24 hours.</div>
+      </form>
+
+      <footer>This tool calls a third-party API. If the request fails in browser, use server proxy.</footer>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="overlay" id="overlay">
+    <div class="dialog" role="dialog" aria-modal="true">
+      <div id="statusArea"></div>
+      <div class="msg compact" id="messageBox">Waiting...</div>
+      <div class="actions">
+        <button class="close" id="closeBtn">Close</button>
+        <button class="ok" id="okBtn">OK</button>
+      </div>
     </div>
   </div>
 
   <script>
     const form = document.getElementById('likeForm');
+    const uidInput = document.getElementById('uid');
+    const regionSelect = document.getElementById('region');
     const submitBtn = document.getElementById('submitBtn');
-    const popupOverlay = document.getElementById('popupOverlay');
-    const popupTitle = document.getElementById('popupTitle');
-    const popupMessage = document.getElementById('popupMessage');
-    const closePopup = document.getElementById('closePopup');
+    const btnText = document.getElementById('btnText');
+    const overlay = document.getElementById('overlay');
+    const messageBox = document.getElementById('messageBox');
+    const statusArea = document.getElementById('statusArea');
+    const closeBtn = document.getElementById('closeBtn');
+    const okBtn = document.getElementById('okBtn');
 
-    function showPopup(title, message) {
-      popupTitle.textContent = title;
-      popupMessage.textContent = message;
-      popupOverlay.style.display = 'flex';
+    // Auto-detect region via IP geolocation (best-effort)
+    async function autoDetectRegion(){
+      try{
+        const res = await fetch('https://ipapi.co/json/');
+        if(!res.ok) return;
+        const j = await res.json();
+        const country = (j && j.country) ? j.country.toUpperCase() : '';
+        const map = { 'PK':'PK','IN':'IN','NP':'NP','BD':'BD','BR':'BR','SG':'SG','ID':'ID','MY':'MY','TH':'TH','US':'US','PH':'PH','VN':'VN'};
+        if(map[country]) regionSelect.value = map[country];
+      }catch(e){
+        // ignore; leave default
+      }
     }
-    function closePopupBox() { popupOverlay.style.display = 'none'; }
-    closePopup.addEventListener('click', closePopupBox);
-    popupOverlay.addEventListener('click', (e) => { if (e.target === popupOverlay) closePopupBox(); });
 
-    function buildUrl(uid) {
-      const likes = Math.floor(Math.random() * 6) + 95; // 95-100 likes
+    autoDetectRegion();
+
+    function buildUrl(uid, region, amount){
       const base = 'https://likes.ffgarena.cloud/api/v2/likes';
-      const params = new URLSearchParams({ uid: uid.trim(), amount_of_likes: likes, auth: 'trial-7d', region: 'PK' });
+      const params = new URLSearchParams({uid: uid.trim(), amount_of_likes: String(amount), auth: 'trial-7d', region: region});
       return `${base}?${params.toString()}`;
     }
 
-    form.addEventListener('submit', async (e) => {
+    function setLoading(on){
+      if(on){
+        btnText.innerHTML = '';
+        const sp = document.createElement('span'); sp.className='spinner';
+        submitBtn.appendChild(sp);
+        submitBtn.disabled = true;
+      } else {
+        const sp = submitBtn.querySelector('.spinner'); if(sp) sp.remove();
+        submitBtn.disabled = false; btnText.textContent = 'Submit';
+      }
+    }
+
+    function showPopup(htmlMessage, success=false){
+      messageBox.className = 'msg compact';
+      messageBox.innerHTML = htmlMessage;
+      statusArea.innerHTML = success ? '<div class="check">\n<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">\n<path d="M9.00039 16.2002L4.80039 12.0002L3.46606 13.3345L9.00039 18.8688L21.0004 6.86877L19.6661 5.53444L9.00039 16.2002Z"/></svg>\n</div>' : '';
+      overlay.classList.add('active');
+    }
+
+    function makeCompactMessage(uid){
+      // compact paragraph that fits mobile
+      return `This account (UID: ${uid}) has already claimed likes today.\nPlease come back after 04:00 AM IST tomorrow to claim again.`;
+    }
+
+    form.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      const uid = document.getElementById('uid').value.trim();
-      if (!uid) return alert('Please enter a UID');
+      const uid = uidInput.value.trim();
+      const region = regionSelect.value || 'PK';
+      if(!uid || !/^\d{4,}$/.test(uid)){
+        showPopup('<strong>Error:</strong> Please enter a valid numeric UID (e.g. 12345678).');
+        return;
+      }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Loading...';
-      submitBtn.classList.add('loading');
+      const amount = Math.floor(Math.random()*6)+95; // 95-100
+      const url = buildUrl(uid, region, amount);
 
-      try {
-        const res = await fetch(buildUrl(uid));
-        const data = await res.json();
-
-        if (data.sent === "0 likes") {
-          showPopup("Already Claimed", `This account (UID: ${uid}) already attempted to receive likes today. Come back tomorrow after 04 AM IST to claim free likes again.`);
+      setLoading(true);
+      try{
+        const res = await fetch(url);
+        const data = await res.json().catch(()=>null);
+        if(!data){
+          showPopup('No response or invalid response from server. Try again later.');
+        } else if(data.status === 200 && data.sent === '0 likes'){
+          // already claimed
+          showPopup(makeCompactMessage(uid), false);
+        } else if(data.status === 200){
+          // success - show nice formatted response with success check
+          const msg = `<strong>Nickname:</strong> ${data.nickname || 'N/A'}<br>`+
+                      `<strong>Region:</strong> ${data.region || region}<br>`+
+                      `<strong>Level:</strong> ${data.level || 'N/A'}<br>`+
+                      `<strong>Likes already:</strong> ${data.likes_antes ?? 'N/A'}<br>`+
+                      `<strong>After:</strong> ${data.likes_depois ?? 'N/A'}<br>`+
+                      `<strong>Sent:</strong> ${data.sent || amount+' likes'}`;
+          showPopup(msg, true);
+        } else if(data.status === 404){
+          showPopup('<strong>Error:</strong> Player not found. Check UID and try again.');
         } else {
-          const formatted = {
-            nickname: data.nickname,
-            region: data.region,
-            level: data.level,
-            exp: data.exp,
-            "likes already": data.likes_antes,
-            after: data.likes_depois,
-            sent: data.sent,
-          };
-          showPopup("Likes Sent!", JSON.stringify(formatted, null, 2));
+          showPopup('<strong>Error:</strong> '+(data.message||'Unknown error'));
         }
-      } catch (err) {
-        showPopup("Error", err.message);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit';
-        submitBtn.classList.remove('loading');
+      }catch(err){
+        showPopup('<strong>Network error:</strong> '+err.message);
+      }finally{
+        setLoading(false);
       }
     });
+
+    closeBtn.addEventListener('click', ()=>overlay.classList.remove('active'));
+    okBtn.addEventListener('click', ()=>overlay.classList.remove('active'));
+    overlay.addEventListener('click',(e)=>{ if(e.target===overlay) overlay.classList.remove('active'); });
   </script>
 </body>
 </html>
