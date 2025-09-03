@@ -15,45 +15,54 @@
       --danger: #ef4444;
       --success: #22c55e;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       margin: 0;
       background: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.15), transparent 60%),
                   radial-gradient(800px 400px at 90% 10%, rgba(56,189,248,.12), transparent 60%),
                   var(--bg);
       color: var(--text);
-      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial;
-      display: grid; place-items: center; min-height: 100vh; padding: 24px;
+      font: 18px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 24px;
     }
     .card {
       width: min(500px, 100%);
       background: var(--card);
-      border-radius: 18px;
-      padding: 24px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
       text-align: center;
     }
-    h1 { margin: 0 0 6px; font-size: clamp(22px, 4vw, 32px); letter-spacing: .5px; }
-    .sub { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
-    label { display:block; margin: 14px 0 6px; font-weight: 600; }
+    h1 { font-size: clamp(24px, 5vw, 36px); margin-bottom: 8px; letter-spacing: .5px; }
+    .sub { margin-bottom: 20px; color: var(--muted); font-size: 15px; }
+    label { display: block; margin: 16px 0 6px; font-weight: 600; }
     input, button {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(148,163,184,0.25);
-      background: #0b1220; color: var(--text);
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.3);
+      background: #0b1220;
+      color: var(--text);
       outline: none;
+      font-size: 18px;
     }
-    input::placeholder { color: #64748b; }
+    input::placeholder { color: #64748b; font-size: 16px; }
     button {
-      cursor: pointer; font-weight: 700; letter-spacing: .3px; margin-top: 14px;
+      cursor: pointer;
+      font-weight: 700;
+      margin-top: 18px;
       background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      color: #001018; border: none; box-shadow: 0 6px 18px rgba(34,211,238,.25);
+      color: #001018;
+      border: none;
+      box-shadow: 0 6px 20px rgba(34,211,238,.3);
       transition: transform .06s ease;
     }
     button:active { transform: translateY(1px); }
     button.loading { background: #0ea5e9; cursor: wait; }
-    
+
     /* Popup */
     .popup-overlay {
       position: fixed;
@@ -61,25 +70,38 @@
       background: rgba(0,0,0,0.6);
       display: none; align-items: center; justify-content: center;
       animation: fadeIn 0.3s ease forwards;
+      z-index: 1000;
     }
     .popup {
       background: var(--card);
-      padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-      max-width: 400px;
+      padding: 24px;
+      border-radius: 18px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+      max-width: 500px;
       width: 90%;
       text-align: center;
       animation: scaleIn 0.3s ease forwards;
+      font-size: 18px;
     }
-    .popup h2 { margin-bottom: 10px; }
+    .popup h2 { margin-bottom: 14px; font-size: 22px; }
+    .popup pre {
+      background: #0a0f1c;
+      padding: 16px;
+      border-radius: 12px;
+      white-space: pre-wrap;
+      text-align: justify;
+      font-size: 16px;
+      border: 1px solid rgba(148,163,184,0.25);
+      margin-bottom: 12px;
+    }
     .popup button {
-      margin-top: 14px;
+      margin-top: 12px;
       background: var(--accent);
       color: #001018;
+      font-size: 18px;
     }
     @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-    @keyframes scaleIn { from {transform:scale(0.8);} to {transform:scale(1);} }
+    @keyframes scaleIn { from {transform:scale(0.85);} to {transform:scale(1);} }
   </style>
 </head>
 <body>
@@ -110,37 +132,19 @@
     const popupMessage = document.getElementById('popupMessage');
     const closePopup = document.getElementById('closePopup');
 
-    function showPopup(title, message, type = 'default') {
+    function showPopup(title, message) {
       popupTitle.textContent = title;
       popupMessage.textContent = message;
       popupOverlay.style.display = 'flex';
     }
-
-    function closePopupBox() {
-      popupOverlay.style.opacity = '1';
-      popupOverlay.style.transition = 'opacity 0.3s ease';
-      popupOverlay.style.opacity = '0';
-      setTimeout(() => {
-        popupOverlay.style.display = 'none';
-        popupOverlay.style.opacity = '1';
-      }, 300);
-    }
-
+    function closePopupBox() { popupOverlay.style.display = 'none'; }
     closePopup.addEventListener('click', closePopupBox);
-    popupOverlay.addEventListener('click', (e) => {
-      if (e.target === popupOverlay) closePopupBox();
-    });
+    popupOverlay.addEventListener('click', (e) => { if (e.target === popupOverlay) closePopupBox(); });
 
     function buildUrl(uid) {
       const likes = Math.floor(Math.random() * 6) + 95; // 95-100 likes
-      const region = 'PK'; // Default region
       const base = 'https://likes.ffgarena.cloud/api/v2/likes';
-      const params = new URLSearchParams({
-        uid: uid.trim(),
-        amount_of_likes: likes,
-        auth: 'trial-7d',
-        region: region.trim(),
-      });
+      const params = new URLSearchParams({ uid: uid.trim(), amount_of_likes: likes, auth: 'trial-7d', region: 'PK' });
       return `${base}?${params.toString()}`;
     }
 
