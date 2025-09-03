@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Claim 100 Free Fire Likes</title>
+  <style>
+    body { font-family: sans-serif; background:#111; color:#eee; padding:20px; }
+    .container { max-width: 480px; margin: auto; }
+    h1 { text-align:center; margin-bottom:10px; }
+    p.lead { font-size:14px; margin-bottom:20px; text-align:center; color:#ccc; }
+    input, button { width:100%; padding:10px; margin-bottom:12px; border-radius:5px; border: none; }
+    input { background:#222; color:#fff; }
+    button { background:#ff5c7a; color:#fff; font-size:16px; cursor:pointer; }
+    .claim-list { margin-top:20px; background:#222; padding:10px; border-radius:5px; max-height:200px; overflow-y:auto; }
+    .claim-item { padding:6px 0; border-bottom:1px solid #333; }
+    .claim-item:last-child { border-bottom:none; }
+    .loading { text-align:center; color:#ffdd57; margin:12px 0; display:none; }
+    .footer { font-size:12px; color:#777; margin-top:20px; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Claim 100 Free Fire Likes</h1>
+    <p class="lead">Enter your UID below and pass verification, then claim your likes instantly!</p>
+
+    <input id="uid" type="text" placeholder="Enter Free Fire UID" />
+
+    <!-- Human verification placeholder -->
+    <div id="verification" style="margin-bottom:12px; text-align:center;">
+      <!-- Insert Turnstile widget or dummy checkbox -->
+      <button onclick="document.getElementById('verification').innerHTML = 'Verified ✓';">I'm human</button>
+    </div>
+
+    <button id="claimBtn">Claim Free Likes</button>
+
+    <div id="loading" class="loading">Processing... Please wait 30 seconds.</div>
+
+    <div class="claim-list" id="claims">
+      <!-- Recent claims will load here -->
+      <div class="claim-item">9052181635 – NAFIS – 98 likes</div>
+      <div class="claim-item">2139466497 – BD乂LEGEND亗 – 100 likes</div>
+      <!-- etc. -->
+    </div>
+
+    <div class="footer">Note: Each UID can claim likes once per 24 hours.</div>
+  </div>
+
+  <script>
+    document.getElementById('claimBtn').addEventListener('click', async () => {
+      const uid = document.getElementById('uid').value.trim();
+      if (!uid) return alert('Enter your UID');
+
+      document.getElementById('loading').style.display = 'block';
+      await new Promise(r => setTimeout(r, 3000));  // simulate wait
+      document.getElementById('loading').style.display = 'none';
+
+      // Mock response
+      const newItem = document.createElement('div');
+      newItem.className = 'claim-item';
+      newItem.textContent = uid + ' – YOURNAME – 100 likes';
+      document.getElementById('claims').prepend(newItem);
+    });
+  </script>
+</body>
+</html>
