@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -51,51 +52,57 @@
       transition: transform .06s ease;
     }
     button:active { transform: translateY(1px); }
-    button.loading { background: #0ea5e9; cursor: wait; }/* Popup */
-.popup-overlay {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: none; align-items: center; justify-content: center;
-  animation: fadeIn 0.3s ease forwards;
-}
-.popup {
-  background: var(--card);
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-  max-width: 400px;
-  width: 90%;
-  text-align: center;
-  animation: scaleIn 0.3s ease forwards;
-}
-.popup h2 { margin-bottom: 10px; }
-.popup button {
-  margin-top: 14px;
-  background: var(--accent);
-  color: #001018;
-}
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-@keyframes scaleIn { from {transform:scale(0.8);} to {transform:scale(1);} }
-
+    button.loading { background: #0ea5e9; cursor: wait; }
+    
+    /* Popup */
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none; align-items: center; justify-content: center;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    .popup {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      animation: scaleIn 0.3s ease forwards;
+    }
+    .popup h2 { margin-bottom: 10px; }
+    .popup button {
+      margin-top: 14px;
+      background: var(--accent);
+      color: #001018;
+    }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    @keyframes scaleIn { from {transform:scale(0.8);} to {transform:scale(1);} }
   </style>
 </head>
 <body>
   <main class="card">
     <h1>Free Fire Likes Tool</h1>
-    <p class="sub">powered by <strong>sheikh zada</strong></p><form id="likeForm">
-  <label for="uid">Enter UID</label>
-  <input id="uid" name="uid" type="text" placeholder="e.g. 2955590815" required />
-  <button id="submitBtn" type="submit">Submit</button>
-</form>
+    <p class="sub">powered by <strong>sheikh zada</strong></p>
 
-  </main>  <div class="popup-overlay" id="popupOverlay">
+    <form id="likeForm">
+      <label for="uid">Enter UID</label>
+      <input id="uid" name="uid" type="text" placeholder="e.g. 2955590815" required />
+      <button id="submitBtn" type="submit">Submit</button>
+    </form>
+  </main>
+
+  <div class="popup-overlay" id="popupOverlay">
     <div class="popup">
       <h2 id="popupTitle">Response</h2>
       <pre id="popupMessage"></pre>
       <button id="closePopup">OK</button>
     </div>
-  </div>  <script>
+  </div>
+
+  <script>
     const form = document.getElementById('likeForm');
     const submitBtn = document.getElementById('submitBtn');
     const popupOverlay = document.getElementById('popupOverlay');
@@ -110,7 +117,13 @@
     }
 
     function closePopupBox() {
-      popupOverlay.style.display = 'none';
+      popupOverlay.style.opacity = '1';
+      popupOverlay.style.transition = 'opacity 0.3s ease';
+      popupOverlay.style.opacity = '0';
+      setTimeout(() => {
+        popupOverlay.style.display = 'none';
+        popupOverlay.style.opacity = '1';
+      }, 300);
     }
 
     closePopup.addEventListener('click', closePopupBox);
@@ -166,5 +179,6 @@
         submitBtn.classList.remove('loading');
       }
     });
-  </script></body>
+  </script>
+</body>
 </html>
