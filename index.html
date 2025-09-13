@@ -5,264 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Free Fire Likes Tool</title>
   <style>
-    :root{
-      --bg:#071025;
-      --card: linear-gradient(145deg,#0f1724,#0b1220);
-      --muted:#9aa8b8;
-      --text:#e6eef6;
-      --accent:#22d3ee;
-      --accent-2:#38bdf8;
-      --success:#22c55e;
-      --glass: rgba(255,255,255,0.03);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial;
-      background:
-        radial-gradient(700px 300px at 10% -20%, rgba(34,211,238,.05), transparent 40%),
-        radial-gradient(500px 200px at 95% 0%, rgba(56,189,248,.03), transparent 40%),
-        var(--bg);
-      color:var(--text);
-      display:grid;
-      place-items:center;
-      padding:28px;
-    }
-
-    .wrap{width:min(820px,100%);padding:18px}
-    .card{
-      background:var(--card);
-      border-radius:14px;
-      padding:22px;
-      box-shadow:0 14px 40px rgba(2,6,23,0.6);
-      border:1px solid rgba(255,255,255,0.03);
-    }
-
-    header{display:flex;align-items:center;gap:14px}
-    .logo{
-      width:58px;height:58px;border-radius:12px;display:grid;place-items:center;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2));
-      color:#001018;font-weight:900;font-size:18px;
-      box-shadow:0 6px 18px rgba(34,211,238,0.12);
-      flex-shrink:0;
-    }
-    .logo svg{width:38px;height:38px;display:block}
-
-    h1{margin:0;font-size:20px}
-    .powered{color:var(--muted);font-size:13px;margin-top:4px}
-
-    form{margin-top:18px}
-    label{display:block;font-weight:700;margin:10px 0 6px;color:var(--muted);font-size:13px}
-
-    input, select, button{
-      width:100%;
-      padding:12px 14px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.04);
-      background:#06121b;color:var(--text);
-      outline:none;font-size:15px;
-      transition:box-shadow .18s ease, transform .06s ease;
-    }
-    input::placeholder{color:#7f8f9d}
-    input:focus, select:focus{
-      box-shadow: 0 6px 20px rgba(56,189,248,0.08), 0 2px 6px rgba(34,211,238,0.03) inset;
-      border-color: rgba(56,189,248,0.26);
-    }
-
-    select.opt{appearance:none;padding-right:40px;background-image:
-      linear-gradient(45deg, transparent 50%, var(--muted) 50%),
-      linear-gradient(135deg, var(--muted) 50%, transparent 50%);
-      background-position: calc(100% - 16px) calc(1.2em), calc(100% - 10px) calc(1.2em);
-      background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
-    }
-
-    .btn{
-      margin-top:14px;display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      color:#001018;border:none;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer;
-      position:relative;overflow:hidden;font-size:15px;
-    }
-    .btn:active{transform:translateY(1px)}
-
-    .spinner{
-      width:18px;height:18px;border-radius:50%;border:3px solid rgba(255,255,255,0.3);border-top-color:white;animation:spin .9s linear infinite;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);visibility:hidden;opacity:0;transition:opacity .26s ease,visibility .26s}
-    .overlay.active{visibility:visible;opacity:1}
-    .dialog{
-      width:min(680px,94%);
-      max-width:640px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      padding:18px;border-radius:12px;box-shadow:0 18px 48px rgba(2,6,23,0.6);
-      transform:translateY(-18px) scale(.99);opacity:0;
-      transition:transform .32s cubic-bezier(.2,.8,.2,1),opacity .32s;
-    }
-    .overlay.active .dialog{transform:translateY(0) scale(1);opacity:1}
-
-    .dialog-header{display:flex;align-items:center;gap:12px;justify-content:center}
-    .check{width:72px;height:72px;border-radius:50%;background:linear-gradient(180deg,var(--success),#66d07b);display:grid;place-items:center;box-shadow:0 10px 30px rgba(34,197,94,0.12);margin:6px auto}
-    .check svg{width:40px;height:40px;fill:white}
-    .msg{background:#041019;border-radius:10px;padding:12px;font-size:15px;line-height:1.3;color:var(--text);border:1px solid rgba(255,255,255,0.03);margin-top:12px;text-align:justify}
-    .msg.compact{font-size:14px;word-break:break-word}
-    .dialog .actions{display:flex;justify-content:center;margin-top:14px;gap:10px}
-    .dialog button.close, .dialog button.ok{padding:8px 12px;border-radius:8px;cursor:pointer}
-    .dialog button.close{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);}
-    .dialog button.ok{background:linear-gradient(90deg,var(--accent-2),#7be28a);color:#012006;border:none;font-weight:800}
-
-    footer{text-align:center;color:var(--muted);font-size:13px;margin-top:16px}
+    body { background:#0f172a; color:#fff; font-family:sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; }
+    .card { background:#1e293b; padding:20px; border-radius:12px; width:320px; text-align:center; }
+    input,select,button { width:100%; margin-top:10px; padding:10px; border:none; border-radius:6px; }
+    button { background:linear-gradient(90deg,#22d3ee,#38bdf8); font-weight:bold; cursor:pointer; }
+    .response { margin-top:15px; background:#0b172a; padding:10px; border-radius:8px; min-height:40px; }
+    footer { margin-top:12px; font-size:13px; color:#94a3b8; text-align:center; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <header>
-        <div class="logo" aria-hidden="true">
-          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="g1" x1="0" x2="1">
-                <stop offset="0" stop-color="#22d3ee"/>
-                <stop offset="1" stop-color="#38bdf8"/>
-              </linearGradient>
-            </defs>
-            <rect x="0" y="0" width="64" height="64" rx="10" fill="url(#g1)"/>
-            <path d="M18 38c3-7 8-11 15-11s12 4 15 11" stroke="#001018" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <circle cx="31" cy="26" r="6" fill="#001018"/>
-          </svg>
-        </div>
-        <div>
-          <h1>Free Fire Likes Tool</h1>
-          <div class="powered">powered by <strong>sheikh zada</strong></div>
-        </div>
-      </header>
-
-      <form id="likeForm" autocomplete="off" style="margin-top:18px">
-        <label for="uid">Enter UID</label>
-        <input id="uid" name="uid" type="text" placeholder="e.g. 12345678" inputmode="numeric" pattern="[0-9]*" required />
-
-        <label for="region" style="margin-top:12px">Select Server</label>
-        <select id="region" class="opt" name="region">
-          <option value="PK">🇵🇰 Pakistan</option>
-          <option value="IN">🇮🇳 India</option>
-          <option value="NP">🇳🇵 Nepal</option>
-          <option value="BD">🇧🇩 Bangladesh</option>
-          <option value="BR">🇧🇷 Brazil</option>
-          <option value="SG">🇸🇬 Singapore</option>
-          <option value="ID">🇮🇩 Indonesia</option>
-          <option value="MY">🇲🇾 Malaysia</option>
-          <option value="TH">🇹🇭 Thailand</option>
-          <option value="US">🇺🇸 United States</option>
-          <option value="PH">🇵🇭 Philippines</option>
-          <option value="VN">🇻🇳 Vietnam</option>
-        </select>
-
-        <button id="submitBtn" class="btn" type="submit" aria-live="polite">
-          <span id="btnText">Submit</span>
-        </button>
-      </form>
-
-      <footer>© <strong>sheikh zada</strong></footer>
-    </div>
-  </div>
-
-  <!-- Popup -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="dialog" role="dialog" aria-modal="true">
-      <div class="dialog-header" id="statusArea"></div>
-      <div class="msg compact" id="messageBox">Waiting...</div>
-      <div class="actions">
-        <button class="close" id="closeBtn">Close</button>
-        <button class="ok" id="okBtn">OK</button>
-      </div>
-    </div>
+  <div class="card">
+    <h2>Free Fire Likes Tool</h2>
+    <form id="likeForm">
+      <input id="uid" type="text" placeholder="Enter UID" required />
+      <select id="region">
+        <option value="PK">🇵🇰 Pakistan</option>
+        <option value="IN">🇮🇳 India</option>
+        <option value="BD">🇧🇩 Bangladesh</option>
+        <option value="BR">🇧🇷 Brazil</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+    <div class="response" id="responseBox">Response will appear here...</div>
+    <footer>© sheikh zada</footer>
   </div>
 
   <script>
-    const form = document.getElementById('likeForm');
-    const uidInput = document.getElementById('uid');
-    const regionSelect = document.getElementById('region');
-    const submitBtn = document.getElementById('submitBtn');
-    const btnText = document.getElementById('btnText');
-    const overlay = document.getElementById('overlay');
-    const messageBox = document.getElementById('messageBox');
-    const statusArea = document.getElementById('statusArea');
-    const closeBtn = document.getElementById('closeBtn');
-    const okBtn = document.getElementById('okBtn');
+    const form = document.getElementById("likeForm");
+    const responseBox = document.getElementById("responseBox");
 
-    (async function autoDetectRegion(){
-      try{
-        const res = await fetch('https://ipapi.co/json/');
-        if(!res.ok) return;
-        const j = await res.json();
-        const map = {PK:'PK',IN:'IN',NP:'NP',BD:'BD',BR:'BR',SG:'SG',ID:'ID',MY:'MY',TH:'TH',US:'US',PH:'PH',VN:'VN'};
-        if(j && j.country && map[j.country.toUpperCase()]) regionSelect.value = map[j.country.toUpperCase()];
-      }catch{}
-    })();
-
-    function buildUrl(uid, region, amount){
-      const base = '/api/likes'; // proxy endpoint
-      const params = new URLSearchParams({ uid: uid.trim(), amount_of_likes: String(amount), region });
-      return `${base}?${params.toString()}`;
-    }
-
-    function setLoading(on){
-      if(on){
-        btnText.textContent = '';
-        const sp = document.createElement('span'); sp.className='spinner'; sp.id='btnSpinner';
-        submitBtn.appendChild(sp); submitBtn.disabled = true;
-      } else {
-        const sp = document.getElementById('btnSpinner'); if(sp) sp.remove();
-        submitBtn.disabled = false; btnText.textContent='Submit';
-      }
-    }
-
-    function showPopup(htmlMessage, success=false){
-      statusArea.innerHTML = success ? `<div class="check"><svg viewBox="0 0 24 24"><path d="M9.00039 16.2002L4.80039 12.0002L3.46606 13.3345L9.00039 18.8688L21.0004 6.86877L19.6661 5.53444L9.00039 16.2002Z"/></svg></div>` : '';
-      messageBox.innerHTML = htmlMessage;
-      overlay.classList.add('active'); overlay.setAttribute('aria-hidden','false');
-    }
-
-    function alreadyClaimedMessage(uid){
-      return `<strong>This account (UID: ${uid}) has already claimed today.</strong><br>
-              Please come back after <strong>04:00 AM IST</strong> tomorrow to claim again.`;
-    }
-
-    form.addEventListener('submit', async e=>{
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const uid = uidInput.value.trim();
-      const region = regionSelect.value || 'PK';
-      if(!uid || !/^\d{4,}$/.test(uid)){
-        showPopup('<strong>Error:</strong> Enter a valid numeric UID.', false);
-        return;
+      responseBox.textContent = "Sending request...";
+
+      const uid = document.getElementById("uid").value.trim();
+      const region = document.getElementById("region").value;
+
+      try {
+        const res = await fetch("/api/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ uid, region, amount_of_likes: 195 })
+        });
+
+        const data = await res.json();
+        responseBox.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        responseBox.textContent = "Error: " + err.message;
       }
-      const amount = Math.floor(Math.random()*11)+190;
-      const url = buildUrl(uid, region, amount);
-      setLoading(true);
-      try{
-        const res = await fetch(url);
-        const text = await res.text();
-        let data; try{ data=JSON.parse(text);}catch{ data={error:text,status:res.status}; }
-
-        if(data.status===200 && data.sent==='0 likes'){
-          showPopup(alreadyClaimedMessage(uid), false);
-        } else if(data.status===200){
-          showPopup(`<strong>Nickname:</strong> ${data.nickname||'N/A'}<br>
-                     <strong>Region:</strong> ${data.region||region} &nbsp; <strong>Level:</strong> ${data.level||'N/A'}<br>
-                     <strong>Likes already:</strong> ${data.likes_antes||'N/A'} &nbsp; <strong>After:</strong> ${data.likes_depois||'N/A'}<br>
-                     <strong>Sent:</strong> ${data.sent||amount+' likes'}`, true);
-        } else {
-          showPopup('<strong>Error:</strong> '+(data.message||data.error||'Server error'), false);
-        }
-      }catch(err){
-        showPopup('<strong>Network error:</strong> '+err.message,false);
-      }finally{ setLoading(false); }
     });
-
-    [closeBtn, okBtn].forEach(b=>b.addEventListener('click',()=>{ overlay.classList.remove('active'); }));
-    overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.classList.remove('active'); });
-    window.addEventListener('keydown',e=>{ if(e.key==='Escape') overlay.classList.remove('active'); });
   </script>
 </body>
-          </html>
+</html>
