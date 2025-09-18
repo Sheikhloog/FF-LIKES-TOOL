@@ -3,268 +3,263 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Free Fire Likes Tool — Local</title>
+<title>Free Fire Likes Tool — Local (with summary)</title>
 <style>
 :root{--bg:#071025;--card:linear-gradient(145deg,#0f1724,#0b1220);--muted:#9aa8b8;--text:#e6eef6;--accent:#22d3ee;--accent-2:#38bdf8;--success:#22c55e}
 *{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:radial-gradient(700px 300px at 10% -20%,rgba(34,211,238,.05),transparent 40%),radial-gradient(500px 200px at 95% 0%,rgba(56,189,248,.03),transparent 40%),var(--bg);color:var(--text);display:grid;place-items:center;padding:28px}
-.wrap{width:min(920px,100%);padding:18px}.card{background:var(--card);border-radius:14px;padding:22px;box-shadow:0 14px 40px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+.wrap{width:min(960px,100%);padding:18px}.card{background:var(--card);border-radius:14px;padding:22px;box-shadow:0 14px 40px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
 header{display:flex;align-items:center;gap:14px}.logo{width:58px;height:58px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#001018;font-weight:900;font-size:18px;box-shadow:0 6px 18px rgba(34,211,238,0.12);flex-shrink:0}
 h1{margin:0;font-size:20px}.powered{color:var(--muted);font-size:13px;margin-top:4px}
 form{margin-top:14px}label{display:block;font-weight:700;margin:10px 0 6px;color:var(--muted);font-size:13px}
-input,select,button,textarea{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:#06121b;color:var(--text);outline:none;font-size:15px}
+input,select,button,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:#06121b;color:var(--text);outline:none;font-size:14px}
 select.opt{appearance:none;padding-right:40px}
-.small{font-size:13px;color:var(--muted);margin-top:10px}
-.btn{margin-top:12px;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#001018;border:none;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer}
-.btn:active{transform:translateY(1px)}
-.spinner{width:18px;height:18px;border-radius:50%;border:3px solid rgba(255,255,255,0.3);border-top-color:white;animation:spin .9s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.panel{margin-top:12px;background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;font-size:13px;color:var(--muted)}
-.results{margin-top:12px;background:#041019;border-radius:10px;padding:12px;max-height:320px;overflow:auto;font-family:monospace;font-size:13px}
-footer{text-align:center;color:var(--muted);font-size:13px;margin-top:12px}
-.small-inline{display:inline-block;font-size:12px;color:var(--muted);margin-left:8px}
+.controls{display:flex;gap:8px;align-items:center}
+.btn{margin-top:10px;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#001018;border:none;padding:10px 14px;border-radius:10px;font-weight:800;cursor:pointer}
+.btn.danger{background:#ef4444;color:#fff}
+.panel{margin-top:12px;background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;font-size:13px;color:var(--muted);display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.summary{display:flex;gap:12px;align-items:center}
+.counter{background:rgba(255,255,255,0.02);padding:8px;border-radius:8px;text-align:center;min-width:80px}
+.results{margin-top:12px;background:#041019;border-radius:10px;padding:12px;max-height:340px;overflow:auto;font-family:monospace;font-size:13px}
+.footer{margin-top:12px;text-align:center;color:var(--muted);font-size:13px}
+.small{font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <header>
-        <div class="logo" aria-hidden="true">FF</div>
+<div class="wrap">
+  <div class="card">
+    <header>
+      <div class="logo">FF</div>
+      <div style="flex:1">
+        <h1>Free Fire Likes Tool — Local</h1>
+        <div class="powered">powered by <strong>sheikh zada</strong></div>
+      </div>
+    </header>
+
+    <form id="mainForm" autocomplete="off">
+      <label>Target UID</label>
+      <input id="uid" placeholder="e.g. 2955590815" required>
+
+      <label style="margin-top:8px">Target Server</label>
+      <select id="region">
+        <option value="PK">🇵🇰 Pakistan</option>
+        <option value="IN">🇮🇳 India</option>
+        <option value="BD">🇧🇩 Bangladesh</option>
+        <option value="BR">🇧🇷 Brazil</option>
+        <option value="SG">🇸🇬 Singapore</option>
+        <option value="ID">🇮🇩 Indonesia</option>
+        <option value="US">🇺🇸 United States</option>
+      </select>
+
+      <label style="margin-top:8px">Upload tokens JSON (local only)</label>
+      <input id="tokensFile" type="file" accept=".json,application/json">
+
+      <div class="panel" style="margin-top:8px">
         <div>
-          <h1>Free Fire Likes Tool — Local</h1>
-          <div class="powered">powered by <strong>sheikh zada</strong></div>
+          <div><strong>Provider URL</strong></div>
+          <input id="providerUrl" value="https://proapis.hlgamingofficial.com/main/games/freefire/likes/api">
         </div>
-      </header>
-
-      <form id="form" autocomplete="off" style="margin-top:14px">
-        <label for="uid">Target UID</label>
-        <input id="uid" type="text" placeholder="e.g. 2955590815" required>
-
-        <label for="region" style="margin-top:8px">Target Server</label>
-        <select id="region" class="opt">
-          <option value="PK">🇵🇰 Pakistan</option>
-          <option value="IN">🇮🇳 India</option>
-          <option value="BD">🇧🇩 Bangladesh</option>
-          <option value="BR">🇧🇷 Brazil</option>
-          <option value="SG">🇸🇬 Singapore</option>
-          <option value="ID">🇮🇩 Indonesia</option>
-          <option value="US">🇺🇸 United States</option>
-        </select>
-
-        <label style="margin-top:10px">Upload tokens JSON (local only)</label>
-        <input id="tokensFile" type="file" accept=".json,application/json">
-
-        <div class="panel">
-          <div><strong>Provider URL</strong> — where requests will be sent (you can use your provider)</div>
-          <input id="providerUrl" type="text" value="https://proapis.hlgamingofficial.com/main/games/freefire/likes/api" />
-          <div style="margin-top:8px"><strong>Request style</strong>:
-            <select id="authStyle" style="width:auto;display:inline-block">
-              <option value="field">field (useruid + api)</option>
-              <option value="query">query params (likes.ffgarena)</option>
-              <option value="bearer">bearer header</option>
-            </select>
-            <span class="small-inline">Choose depending on your provider</span>
-          </div>
-
-          <div style="margin-top:8px">
-            <label><input id="autoStopOnSuccess" type="checkbox" checked> Stop when one token succeeds</label>
-            <label style="margin-left:12px"><input id="shuffleTokens" type="checkbox"> Shuffle token order</label>
-          </div>
-
-          <div style="margin-top:8px">
-            <label>Delay between attempts (ms)</label>
-            <input id="delayMs" type="number" value="800" min="50" />
-          </div>
+        <div>
+          <div><strong>Auth style</strong></div>
+          <select id="authStyle" style="width:100%">
+            <option value="field">field (useruid + api)</option>
+            <option value="query">query (likes.ffgarena)</option>
+            <option value="bearer">bearer header</option>
+          </select>
         </div>
 
-        <button id="startBtn" class="btn" type="button"><span id="btnText">Start</span></button>
-        <button id="stopBtn" class="btn" type="button" style="background:#ef4444;color:#fff;margin-left:8px">Stop</button>
+        <div>
+          <div style="margin-top:6px"><label><input id="stopOnSuccess" type="checkbox" checked> Stop on first success</label></div>
+          <div style="margin-top:6px"><label><input id="shuffleTokens" type="checkbox"> Shuffle tokens</label></div>
+        </div>
 
-        <div class="small" style="margin-top:8px">This page runs locally: tokens are read from a file you upload and never sent to any server except the provider.</div>
-      </form>
+        <div>
+          <div style="margin-top:6px"><label>Delay ms</label></div>
+          <input id="delayMs" type="number" value="800" min="50">
+        </div>
+      </div>
 
-      <div class="results" id="results" aria-live="polite"></div>
-      <footer>© <strong>sheikh zada</strong></footer>
+      <div class="controls" style="margin-top:10px">
+        <button id="startBtn" class="btn" type="button">Start</button>
+        <button id="stopBtn" class="btn danger" type="button" disabled>Stop</button>
+        <button id="exportBtn" class="btn" type="button" style="margin-left:auto">Export Log (CSV)</button>
+      </div>
+
+      <div style="margin-top:10px" class="small">Local only: tokens stay in your browser memory and are not uploaded anywhere except provider.</div>
+    </form>
+
+    <div style="margin-top:12px" class="summary">
+      <div class="counter"><div style="font-size:12px;color:var(--muted)">Tried</div><div id="countTried" style="font-weight:800">0</div></div>
+      <div class="counter"><div style="font-size:12px;color:var(--muted)">Success</div><div id="countSuccess" style="font-weight:800;color:lightgreen">0</div></div>
+      <div class="counter"><div style="font-size:12px;color:var(--muted)">Fail</div><div id="countFail" style="font-weight:800;color:orange">0</div></div>
+      <div style="margin-left:auto" class="small">Attempts log (newest first)</div>
     </div>
+
+    <div id="results" class="results" aria-live="polite"></div>
+
+    <div class="footer">© <strong>sheikh zada</strong></div>
   </div>
+</div>
 
 <script>
 (() => {
-  const tokensFileInput = document.getElementById('tokensFile');
+  const tokensFile = document.getElementById('tokensFile');
   const startBtn = document.getElementById('startBtn');
   const stopBtn = document.getElementById('stopBtn');
-  const resultsEl = document.getElementById('results');
-  const providerUrlInput = document.getElementById('providerUrl');
+  const exportBtn = document.getElementById('exportBtn');
+  const results = document.getElementById('results');
+  const providerUrlEl = document.getElementById('providerUrl');
   const authStyleEl = document.getElementById('authStyle');
-  const delayInput = document.getElementById('delayMs');
-  const autoStopOnSuccess = document.getElementById('autoStopOnSuccess');
-  const shuffleTokensEl = document.getElementById('shuffleTokens');
+  const delayEl = document.getElementById('delayMs');
+  const stopOnSuccessEl = document.getElementById('stopOnSuccess');
+  const shuffleEl = document.getElementById('shuffleTokens');
+
+  const countTriedEl = document.getElementById('countTried');
+  const countSuccessEl = document.getElementById('countSuccess');
+  const countFailEl = document.getElementById('countFail');
 
   let tokens = [];
   let running = false;
-  let controller = null; // for aborting fetches
+  let abortController = null;
+  let logRows = [];
 
-  function appendLog(line){
-    const d = document.createElement('div');
-    d.innerHTML = line;
-    resultsEl.prepend(d);
+  function addLog(row){
+    logRows.unshift(row);
+    // render one line
+    const el = document.createElement('div');
+    el.innerHTML = `<div><strong>${escapeHtml(row.id)}</strong> — <span style="color:${row.ok? 'lightgreen':'orange'}">${row.ok? 'SUCCESS':'FAIL'}</span> — status:${row.status || ''} — ${escapeHtml(row.message||'')}</div>`;
+    results.prepend(el);
+    // update counters
+    countTriedEl.textContent = String(Number(countTriedEl.textContent || 0) + 1);
+    if(row.ok) countSuccessEl.textContent = String(Number(countSuccessEl.textContent || 0) + 1);
+    else countFailEl.textContent = String(Number(countFailEl.textContent || 0) + 1);
   }
 
-  function parseTokensArray(arr){
-    // Normalize token items to object { id, token }
-    return arr.map((it, i) => {
-      if(typeof it === 'string') return { id: `tok-${i}`, token: it };
-      if(it && (it.token || it.api || it.key)) {
-        return { id: it.uid || it.id || `tok-${i}`, token: it.token || it.api || it.key };
-      }
-      // fallback: full object stringified as token
-      return { id: it.uid || it.id || `tok-${i}`, token: JSON.stringify(it) };
+  function escapeHtml(s){
+    return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function parseTokens(data){
+    if(!Array.isArray(data)) return [];
+    return data.map((it, idx) => {
+      if(typeof it === 'string') return { id:`tok-${idx+1}`, token: it };
+      if(it && (it.token||it.api||it.key)) return { id: it.uid||it.id||`tok-${idx+1}`, token: it.token||it.api||it.key };
+      return { id: it.uid||it.id||`tok-${idx+1}`, token: JSON.stringify(it) };
     });
   }
 
-  tokensFileInput.addEventListener('change', (e)=>{
-    const f = e.target.files[0];
-    if(!f) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        if(!Array.isArray(parsed)) {
-          appendLog('<span style="color:orange">Tokens file must be a JSON array of tokens.</span>');
-          return;
-        }
-        tokens = parseTokensArray(parsed);
-        appendLog(`<span style="color:lightgreen">Loaded ${tokens.length} token entries from file.</span>`);
-      } catch(err) {
-        appendLog(`<span style="color:tomato">Failed to parse JSON file: ${err.message}</span>`);
+  tokensFile.addEventListener('change', e=>{
+    const f = e.target.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try{
+        const parsed = JSON.parse(rd.result);
+        tokens = parseTokens(parsed);
+        results.innerHTML = `<div style="color:lightgreen">Loaded ${tokens.length} tokens.</div>`;
+        // reset counters/logs
+        countTriedEl.textContent='0'; countSuccessEl.textContent='0'; countFailEl.textContent='0';
+        logRows = [];
+      }catch(err){
+        results.innerHTML = `<div style="color:tomato">JSON parse error: ${err.message}</div>`;
       }
     };
-    reader.readAsText(f);
+    rd.readAsText(f);
   });
 
-  function shuffle(a){
-    for(let i=a.length-1;i>0;i--){
-      const j=Math.floor(Math.random()*(i+1));
-      [a[i],a[j]]=[a[j],a[i]];
-    }
-    return a;
-  }
+  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
-  async function tryToken(tokenObj, uid, region, providerUrl, amount, authStyle) {
-    // tokenObj: {id, token}
-    // Two provider styles supported:
-    // - field: POST JSON { useruid, api, region, ff_uid }
-    // - bearer: POST JSON with Authorization Bearer <token>
-    // - query: GET to likes.ffgarena.cloud with auth as query param
+  async function attempt(tokenObj, uid, region, providerUrl, amount, authStyle){
     const id = tokenObj.id;
     const token = tokenObj.token;
-    const summary = { id, ok: false, status: null, text: null, json: null };
-
+    const row = { id, ok:false, status:null, message:'' };
     try {
-      controller = new AbortController();
-      const signal = controller.signal;
-      if(authStyle === 'field') {
-        const body = { useruid: id, api: token, region, ff_uid: Number(uid) };
-        // some providers also accept amount field named 'amount'
-        body.amount = amount;
-        const resp = await fetch(providerUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-          signal
-        });
-        summary.status = resp.status;
-        const text = await resp.text();
-        summary.text = text.slice(0,2000);
-        try { summary.json = JSON.parse(text); } catch(e){}
-        // heuristics for success
-        if(summary.json && (summary.json.status === 200) && summary.json.sent && summary.json.sent !== '0 likes') {
-          summary.ok = true;
-        } else if(resp.status === 200 && summary.json && summary.json.sent && summary.json.sent !== '0 likes') {
-          summary.ok = true;
-        }
-      } else if(authStyle === 'bearer') {
-        const resp = await fetch(providerUrl, {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ ff_uid: Number(uid), region, amount }),
-          signal
-        });
-        summary.status = resp.status;
-        const text = await resp.text();
-        summary.text = text.slice(0,2000);
-        try { summary.json = JSON.parse(text); } catch(e){}
-        if(summary.json && summary.json.status===200 && summary.json.sent && summary.json.sent!=='0 likes') summary.ok = true;
-      } else { // query (likes.ffgarena.cloud)
+      abortController = new AbortController();
+      const signal = abortController.signal;
+      if(authStyle === 'field'){
+        const body = { useruid: id, api: token, region, ff_uid: Number(uid), amount };
+        const r = await fetch(providerUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal});
+        row.status = r.status;
+        const txt = await r.text();
+        row.message = txt.slice(0,300);
+        try{ const j = JSON.parse(txt); if(j && j.status===200 && j.sent && j.sent!=='0 likes') row.ok=true; }catch(e){}
+      } else if(authStyle === 'bearer'){
+        const r = await fetch(providerUrl, { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`}, body: JSON.stringify({ ff_uid: Number(uid), region, amount }), signal});
+        row.status = r.status;
+        const txt = await r.text(); row.message = txt.slice(0,300);
+        try{ const j = JSON.parse(txt); if(j && j.status===200 && j.sent && j.sent!=='0 likes') row.ok=true; }catch(e){}
+      } else { // query
         const qs = new URLSearchParams({ uid: uid, amount_of_likes: String(amount), auth: token, region });
         const url = (providerUrl || 'https://likes.ffgarena.cloud/api/v2/likes') + '?' + qs.toString();
-        const resp = await fetch(url, { method: 'GET', signal });
-        summary.status = resp.status;
-        const text = await resp.text();
-        summary.text = text.slice(0,2000);
-        try { summary.json = JSON.parse(text); } catch(e){}
-        if(summary.json && summary.json.status===200 && summary.json.sent && summary.json.sent!=='0 likes') summary.ok = true;
+        const r = await fetch(url, { method:'GET', signal });
+        row.status = r.status;
+        const txt = await r.text(); row.message = txt.slice(0,300);
+        try{ const j = JSON.parse(txt); if(j && j.status===200 && j.sent && j.sent!=='0 likes') row.ok=true; }catch(e){}
       }
-    } catch (err) {
-      summary.status = summary.status || 0;
-      summary.text = err.message;
+    } catch(err){
+      row.message = err.message;
     } finally {
-      controller = null;
+      abortController = null;
     }
-    return summary;
+    return row;
   }
 
   startBtn.addEventListener('click', async ()=>{
     if(running) return;
     const uid = document.getElementById('uid').value.trim();
     const region = document.getElementById('region').value;
-    if(!uid){ appendLog('<span style="color:tomato">Enter a target UID first.</span>'); return; }
-    if(!tokens || tokens.length===0){ appendLog('<span style="color:tomato">Upload a tokens JSON file first.</span>'); return; }
-
-    running = true;
-    startBtn.disabled = true;
-    stopBtn.disabled = false;
-    resultsEl.innerHTML = '';
-
-    let tokenList = tokens.slice();
-    if(shuffleTokensEl.checked) tokenList = shuffle(tokenList);
-
-    const providerUrl = providerUrlInput.value.trim() || 'https://proapis.hlgamingofficial.com/main/games/freefire/likes/api';
+    const providerUrl = providerUrlEl.value.trim();
     const authStyle = authStyleEl.value;
-    const delay = Math.max(50, Number(delayInput.value) || 700);
-    const stopOnSuccess = autoStopOnSuccess.checked;
+    const delay = Math.max(50, Number(delayEl.value) || 700);
+    const stopOnSuccess = stopOnSuccessEl.checked;
+    const shuffle = shuffleEl.checked;
 
-    appendLog(`<span style="color:lightblue">Starting attempts — ${tokenList.length} tokens (style: ${authStyle})</span>`);
+    if(!uid){ results.innerHTML = `<div style="color:tomato">Enter target UID.</div>`; return; }
+    if(!tokens || tokens.length === 0){ results.innerHTML = `<div style="color:tomato">Upload tokens JSON first.</div>`; return; }
 
-    for(let i=0;i<tokenList.length && running;i++){
-      const tokenObj = tokenList[i];
-      const amount = Math.floor(Math.random()*11)+190; // 190-200
-      appendLog(`<strong>Trying token:</strong> ${tokenObj.id} — amount ${amount}`);
-      const result = await tryToken(tokenObj, uid, region, providerUrl, amount, authStyle);
-      const ok = result.ok ? '<span style="color:lightgreen">SUCCESS</span>' : `<span style="color:orange">FAIL</span>`;
-      const out = `<div><strong>${tokenObj.id}</strong> — ${ok} — status:${result.status} — ${result.text ? result.text.replace(/</g,'&lt;').slice(0,240) : ''}</div>`;
-      appendLog(out);
+    // reset counts and UI
+    results.innerHTML=''; countTriedEl.textContent='0'; countSuccessEl.textContent='0'; countFailEl.textContent='0'; logRows=[];
 
-      if(result.ok && stopOnSuccess){
-        appendLog('<span style="color:lightgreen">Stopped because a token succeeded.</span>');
+    running = true; startBtn.disabled=true; stopBtn.disabled=false;
+    let list = tokens.slice();
+    if(shuffle) list = list.sort(()=>Math.random()-0.5);
+
+    for(let i=0;i<list.length && running;i++){
+      const t = list[i];
+      const amount = Math.floor(Math.random()*11)+190;
+      addLog({ id: t.id, ok:false, status:'...', message:`Trying amount ${amount}...` });
+      const resRow = await attempt(t, uid, region, providerUrl, amount, authStyle);
+      addLog(resRow);
+      if(resRow.ok && stopOnSuccess){
+        addLog({ id:'SYSTEM', ok:true, status:'', message:'Stopped: success found' });
         break;
       }
-
-      // small delay between attempts
-      await new Promise(r => setTimeout(r, delay));
+      await sleep(delay);
     }
 
-    appendLog('<span style="color:lightblue">Finished attempts.</span>');
-    running = false;
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
+    running=false; startBtn.disabled=false; stopBtn.disabled=true;
+    addLog({ id:'SYSTEM', ok:false, status:'', message:'Finished attempts' });
   });
 
   stopBtn.addEventListener('click', ()=>{
-    running = false;
-    if(controller) controller.abort();
-    appendLog('<span style="color:tomato">Execution stopped by user.</span>');
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
+    running=false;
+    if(abortController) abortController.abort();
+    startBtn.disabled=false; stopBtn.disabled=true;
+    addLog({ id:'SYSTEM', ok:false, status:'', message:'Stopped by user' });
+  });
+
+  exportBtn.addEventListener('click', ()=>{
+    if(!logRows.length){ alert('No logs to export'); return; }
+    const header = ['id','ok','status','message','ts'];
+    const lines = [header.join(',')];
+    const timestamp = new Date().toISOString();
+    for(const r of logRows){
+      const row = [r.id, r.ok? '1':'0', r.status || '', `"${(r.message||'').replace(/"/g,'""')}"`, timestamp];
+      lines.push(row.join(','));
+    }
+    const blob = new Blob([lines.join('\n')], { type:'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `ff_likes_log_${Date.now()}.csv`; document.body.appendChild(a); a.click();
+    URL.revokeObjectURL(url); a.remove();
   });
 
 })();
