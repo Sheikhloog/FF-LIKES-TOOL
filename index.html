@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Free Fire Likes Tool</title>
   <style>
     :root{
@@ -47,7 +47,6 @@
       box-shadow:0 6px 18px rgba(34,211,238,0.12);
       flex-shrink:0;
     }
-    /* inline "Garena-like" SVG inside logo for guaranteed display */
     .logo svg{width:38px;height:38px;display:block}
 
     h1{margin:0;font-size:20px}
@@ -70,7 +69,6 @@
     }
     input::placeholder{color:#7f8f9d}
 
-    /* subtle glow on focus */
     input:focus, select:focus{
       box-shadow: 0 6px 20px rgba(56,189,248,0.08), 0 2px 6px rgba(34,211,238,0.03) inset;
       border-color: rgba(56,189,248,0.26);
@@ -98,7 +96,6 @@
     }
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* popup overlay & dialog */
     .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);visibility:hidden;opacity:0;transition:opacity .26s ease,visibility .26s}
     .overlay.active{visibility:visible;opacity:1}
     .dialog{
@@ -121,7 +118,6 @@
 
     footer{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
 
-    /* responsive tweaks */
     @media(max-width:480px){
       .dialog{width:94%}
       .msg{font-size:13px}
@@ -135,7 +131,6 @@
     <div class="card">
       <header>
         <div class="logo" aria-hidden="true">
-          <!-- Inline SVG logo (replace with actual Garena logo URL if you want) -->
           <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
               <linearGradient id="g1" x1="0" x2="1">
@@ -176,7 +171,7 @@
         </select>
 
         <button id="submitBtn" class="btn" type="submit" aria-live="polite">
-          <span id="btnText">Submit</span>
+          <span id="btnText">Claim Free Likes</span>
         </button>
 
         <div class="small">Each UID can claim once every 24 hours.</div>
@@ -186,7 +181,6 @@
     </div>
   </div>
 
-  <!-- Popup -->
   <div class="overlay" id="overlay" aria-hidden="true">
     <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
       <div class="dialog-header" id="statusArea" style="min-height:62px;align-items:center"></div>
@@ -199,7 +193,6 @@
   </div>
 
   <script>
-    // Elements
     const form = document.getElementById('likeForm');
     const uidInput = document.getElementById('uid');
     const regionSelect = document.getElementById('region');
@@ -211,7 +204,9 @@
     const closeBtn = document.getElementById('closeBtn');
     const okBtn = document.getElementById('okBtn');
 
-    // Auto-detect region (best-effort) using ipapi.co
+    // Target page from your request (FreeFireInfo claim page)
+    const TARGET_PAGE = 'https://freefireinfo.in/claim-100-free-fire-likes-via-uid-for-free/';
+
     (async function autoDetectRegion(){
       try{
         const res = await fetch('https://ipapi.co/json/');
@@ -222,23 +217,10 @@
         const map = {PK:'PK',IN:'IN',NP:'NP',BD:'BD',BR:'BR',SG:'SG',ID:'ID',MY:'MY',TH:'TH',US:'US',PH:'PH',VN:'VN'};
         if(map[code]) regionSelect.value = map[code];
       }catch(e){
-        // ignore errors, keep default
+        // ignore
       }
     })();
 
-    // Build API URL
-    function buildUrl(uid, region, amount){
-      const base = 'https://likes.ffgarena.cloud/api/v2/likes';
-      const params = new URLSearchParams({
-        uid: uid.trim(),
-        amount_of_likes: String(amount),
-        auth: 'trial-7d',
-        region: region
-      });
-      return `${base}?${params.toString()}`;
-    }
-
-    // Set loading state on button
     function setLoading(on){
       if(on){
         btnText.textContent = '';
@@ -248,13 +230,11 @@
       } else {
         const sp = document.getElementById('btnSpinner'); if(sp) sp.remove();
         submitBtn.disabled = false;
-        btnText.textContent = 'Submit';
+        btnText.textContent = 'Claim Free Likes';
       }
     }
 
-    // Show popup
     function showPopup(htmlMessage, success=false){
-      // statusArea shows success check if needed
       statusArea.innerHTML = success ? `<div class="check" aria-hidden="true">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.00039 16.2002L4.80039 12.0002L3.46606 13.3345L9.00039 18.8688L21.0004 6.86877L19.6661 5.53444L9.00039 16.2002Z"/></svg>
       </div>` : '';
@@ -264,14 +244,33 @@
       overlay.setAttribute('aria-hidden','false');
     }
 
-    // Compact "already claimed" paragraph optimized for mobile (2-3 lines)
-    function alreadyClaimedMessage(uid){
-      // Keep words tight, short lines, small size to show well on mobile
-      return `<strong>This account (UID: ${uid}) has already claimed today.</strong><br>` +
-             `Please come back after <strong>04:00 AM IST</strong> tomorrow to claim again.`;
+    // Helper: try to decide success/failure by scanning response HTML for clues
+    function parseClaimResponse(html, uid){
+      const lower = html.toLowerCase();
+
+      // Common phrases / heuristics seen in that site and similar pages
+      if(lower.includes('already claimed') || lower.includes('come back') || lower.includes('24 hour') || lower.includes('already attempted')){
+        return { ok:false, text: `<strong>This account (UID: ${uid}) has already claimed today.</strong><br>Please come back after <strong>04:00 AM IST</strong> to claim again.` };
+      }
+
+      if(lower.includes('100 likes') || lower.includes('100like') || lower.includes('sent') || lower.includes('likes credited') || lower.includes('likes added')){
+        // Try to extract some visible nickname/likes line — fallback: show success
+        return { ok:true, text: `<strong>Success:</strong> Likes claimed. If the site confirms, check your profile after a few seconds.` };
+      }
+
+      // Generic fallback: return a chunk of the remote page around keywords if any
+      const snippetMatch = lower.match(/(uid|likes|claimed|processing|error|success|nickname)[^<]{0,120}/g);
+      const snippet = snippetMatch ? snippetMatch.slice(0,6).join(' — ') : null;
+      return { ok: snippet ? false : false, text: snippet ? snippet : 'No clear confirmation from remote site — check response below.<br><pre style="white-space:pre-wrap;max-height:220px;overflow:auto;background:#001018;padding:8px;border-radius:6px;">' + escapeHtml(html).slice(0,800) + '</pre>' };
     }
 
-    // Form submit handler
+    function escapeHtml(unsafe){
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const uid = uidInput.value.trim();
@@ -281,59 +280,47 @@
         return;
       }
 
-      const amount = Math.floor(Math.random() * 6) + 95; // 95-100
-      const url = buildUrl(uid, region, amount);
-
+      // Note: the target site is a regular page — we POST the uid and region as form data.
+      // The remote site may also require Cloudflare Turnstile or other protections; if so,
+      // this request might not succeed from a browser due to CORS or captcha protections.
       setLoading(true);
       try{
-        const res = await fetch(url);
-        // handle non-json responses
+        const formData = new URLSearchParams();
+        formData.set('uid', uid);
+        formData.set('region', region);
+
+        const res = await fetch(TARGET_PAGE, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            // Some sites may block fetch without a proper referer / user-agent — but browsers set these automatically.
+          },
+          body: formData.toString(),
+          credentials: 'omit' // do not send cookies
+        });
+
         const text = await res.text();
-        let data = null;
-        try{ data = JSON.parse(text); } catch(e){ data = { raw: text, status: res.status }; }
 
-        if(!data){
-          showPopup('No response from server. Try again later.', false);
-        } else if(data.status === 200 && data.sent === '0 likes'){
-          // already claimed
-          showPopup(alreadyClaimedMessage(uid), false);
-        } else if(data.status === 200){
-          // success
-          const nickname = data.nickname || 'N/A';
-          const regionResp = data.region || region;
-          const level = data.level ?? 'N/A';
-          const likes_before = data.likes_antes ?? 'N/A';
-          const likes_after = data.likes_depois ?? 'N/A';
-          const sent = data.sent || (amount + ' likes');
-
-          const msg = `<strong>Nickname:</strong> ${nickname}<br>` +
-                      `<strong>Region:</strong> ${regionResp} &nbsp; <strong>Level:</strong> ${level}<br>` +
-                      `<strong>Likes already:</strong> ${likes_before} &nbsp; <strong>After:</strong> ${likes_after}<br>` +
-                      `<strong>Sent:</strong> ${sent}`;
-
-          showPopup(msg, true);
-        } else if(data.status === 404){
-          showPopup('<strong>Error:</strong> Player not found. Check UID and try again.', false);
+        // If the remote site blocks cross-origin requests (CORS), fetch will throw or will return opaque response.
+        if(res.type === 'opaque' && res.status === 0){
+          // Opaque response (CORS) — we cannot read remote HTML. Show generic message and a link.
+          showPopup(`<strong>Request sent.</strong><br>The remote site may restrict direct responses (CORS/captcha). If you see no popup details, please open the tool directly:<br><a href="${TARGET_PAGE}" target="_blank" rel="noopener noreferrer">${TARGET_PAGE}</a>`, false);
         } else {
-          // fallback
-          const errMsg = data.message || data.raw || ('HTTP ' + (data.status || res.status));
-          showPopup('<strong>Error:</strong> ' + errMsg, false);
+          const parsed = parseClaimResponse(text, uid);
+          showPopup(parsed.text, parsed.ok);
         }
       }catch(err){
-        showPopup('<strong>Network error:</strong> ' + err.message, false);
+        // network errors (CORS/captcha/blocked)
+        showPopup('<strong>Network / CORS error:</strong> ' + escapeHtml(err.message) + '<br>If the target site requires a captcha or blocks cross-site requests, open the target page directly: <br><a href="' + TARGET_PAGE + '" target="_blank" rel="noopener noreferrer">' + TARGET_PAGE + '</a>', false);
       }finally{
         setLoading(false);
       }
     });
 
-    // close handlers
     closeBtn.addEventListener('click', ()=>{ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); });
     okBtn.addEventListener('click', ()=>{ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); });
     overlay.addEventListener('click', (e)=>{ if(e.target === overlay){ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); } });
-
-    // Accessibility: close on Escape
     window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && overlay.classList.contains('active')){ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); } });
-
   </script>
 </body>
 </html>
