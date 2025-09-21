@@ -1,55 +1,116 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Give 100 Likes</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Fire Likes Tool</title>
   <style>
-    body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial; padding: 2rem; max-width: 700px; margin: auto; }
-    input { padding: .5rem; font-size: 1rem; width: 60%; }
-    button { padding: .5rem 1rem; font-size: 1rem; }
-    .msg { margin-top: 1rem; color: #111; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: #ff4500;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #e63e00;
+    }
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <h1>Get 100 Likes</h1>
-  <p>Enter your UID below and click <strong>Give 100</strong>. This adds 100 internal likes to your UID on this website only.</p>
-
-  <div>
-    <input id="uid" placeholder="Enter UID (e.g. 123456789)" />
-    <button id="give">Give 100</button>
-    <button id="check">Check Likes</button>
+  <div class="container">
+    <h2>🔥 Free Fire Likes Tool 🔥</h2>
+    <input id="uid" placeholder="Enter your UID" />
+    <select id="region">
+      <option value="PK">Pakistan</option>
+      <option value="IN">India</option>
+      <option value="BD">Bangladesh</option>
+    </select>
+    <button onclick="giveLikes()">Give 100 Likes</button>
+    <button onclick="checkLikes()">Check Likes</button>
+    <div id="result"></div>
   </div>
 
-  <p class="msg" id="msg"></p>
-
   <script>
-    const msg = document.getElementById('msg');
-    document.getElementById('give').addEventListener('click', async () => {
-      const uid = document.getElementById('uid').value.trim();
-      if (!uid) { msg.innerText = 'Please enter a UID'; return; }
-      try {
-        const r = await fetch('/api/give100', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ uid })
-        });
-        const j = await r.json();
-        if (r.ok) msg.innerText = j.message + ' Total likes: ' + j.likes;
-        else msg.innerText = j.error || 'Error';
-      } catch (e) { msg.innerText = 'Network error'; }
-    });
+    async function giveLikes() {
+      const uid = document.getElementById("uid").value.trim();
+      const region = document.getElementById("region").value;
+      const result = document.getElementById("result");
 
-    document.getElementById('check').addEventListener('click', async () => {
-      const uid = document.getElementById('uid').value.trim();
-      if (!uid) { msg.innerText = 'Please enter a UID'; return; }
+      if (!uid) {
+        result.textContent = "⚠️ Please enter a UID.";
+        return;
+      }
+
       try {
-        const r = await fetch('/api/likes/' + encodeURIComponent(uid));
-        const j = await r.json();
-        if (r.ok) msg.innerText = 'Total likes for ' + uid + ': ' + j.likes;
-        else msg.innerText = j.error || 'Error';
-      } catch (e) { msg.innerText = 'Network error'; }
-    });
+        result.textContent = "⏳ Sending likes...";
+        const res = await fetch("/api/give100", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ uid, region, amount: 100 })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          result.textContent = `✅ Success: ${data.message || "100 likes sent!"}`;
+        } else {
+          result.textContent = `❌ Error: ${data.error || "Request failed"}`;
+        }
+      } catch (err) {
+        result.textContent = "🚫 Network error: " + err.message;
+      }
+    }
+
+    async function checkLikes() {
+      const uid = document.getElementById("uid").value.trim();
+      const result = document.getElementById("result");
+
+      if (!uid) {
+        result.textContent = "⚠️ Please enter a UID.";
+        return;
+      }
+
+      try {
+        result.textContent = "⏳ Checking likes...";
+        const res = await fetch(`/api/likes/${uid}`);
+        const data = await res.json();
+        if (res.ok) {
+          result.textContent = `👍 UID ${uid} has ${data.likes || 0} likes.`;
+        } else {
+          result.textContent = `❌ Error: ${data.error || "Request failed"}`;
+        }
+      } catch (err) {
+        result.textContent = "🚫 Network error: " + err.message;
+      }
+    }
   </script>
 </body>
 </html>
