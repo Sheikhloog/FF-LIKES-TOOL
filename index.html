@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free Fire Likes Tool</title>
+</head>
+<body>
+  <h1>Free Fire Likes Tool</h1>
+  <form id="likeForm">
+    <input id="uid" name="uid" placeholder="Enter UID" />
+    <button type="submit">Get Likes</button>
+  </form>
+  <script>
+    document.getElementById('likeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const uid = document.getElementById('uid').value.trim();
+      const res = await fetch(`/api/likes/${uid}`);
+      const data = await res.json();
+      alert(JSON.stringify(data));
+    });
+  </script>
+</body>
+</html>
