@@ -5,6 +5,7 @@ export default async function handler(req, res) {
   const { uid } = req.query;
   const file = "/tmp/likes.json";
 
+  // file initialize
   if (!fs.existsSync(file)) {
     fs.writeFileSync(file, JSON.stringify({}));
   }
@@ -12,17 +13,24 @@ export default async function handler(req, res) {
   let data = JSON.parse(fs.readFileSync(file, "utf8"));
 
   if (!data[uid]) {
-    data[uid] = { likes: 0 };
+    data[uid] = { likes: 0, nickname: `Player_${uid}` };
   }
 
-  data[uid].likes += 100;
+  let likes_before = data[uid].likes;
+  let likes_sent = 100;
+  let likes_after = likes_before + likes_sent;
+
+  // update
+  data[uid].likes = likes_after;
 
   fs.writeFileSync(file, JSON.stringify(data));
 
   res.status(200).json({
     status: 200,
     uid,
-    sent: "100 likes",
-    total_likes: data[uid].likes,
+    nickname: data[uid].nickname,
+    likes_before,
+    likes_sent,
+    likes_after,
   });
 }
