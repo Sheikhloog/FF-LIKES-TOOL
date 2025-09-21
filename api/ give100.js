@@ -1,20 +1,21 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+const fs = require("fs");
+const path = require("path");
+
+module.exports = async function (req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const fs = require('fs');
-  const path = require('path');
-  const filePath = path.join(process.cwd(), 'likes.json');
-
+  const filePath = path.join(process.cwd(), "likes.json");
   let data = {};
+
   if (fs.existsSync(filePath)) {
-    data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    data = JSON.parse(fs.readFileSync(filePath, "utf8"));
   }
 
   const { uid, region, amount } = req.body;
   if (!uid) {
-    return res.status(400).json({ error: 'UID required' });
+    return res.status(400).json({ error: "UID required" });
   }
 
   if (!data[uid]) {
@@ -24,5 +25,10 @@ export default async function handler(req, res) {
 
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 
-  return res.status(200).json({ status: 'ok', uid, region, likes: data[uid].likes });
-}
+  return res.status(200).json({
+    status: "ok",
+    uid,
+    region,
+    likes: data[uid].likes,
+  });
+};
