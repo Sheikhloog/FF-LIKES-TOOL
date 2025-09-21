@@ -4,20 +4,66 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Free Fire Likes Tool</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; text-align: center; padding: 30px; }
+    h1 { color: #333; }
+    form { margin: 20px auto; }
+    input, button { padding: 10px; margin: 5px; }
+    .popup {
+      display: none; position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); background: white; padding: 20px;
+      border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      text-align: left; width: 300px;
+    }
+    .popup h2 { margin-top: 0; }
+    .popup button { margin-top: 10px; }
+  </style>
 </head>
 <body>
   <h1>Free Fire Likes Tool</h1>
   <form id="likeForm">
-    <input id="uid" name="uid" placeholder="Enter UID" />
+    <input id="uid" name="uid" placeholder="Enter UID" required />
     <button type="submit">Get Likes</button>
   </form>
+
+  <div id="popup" class="popup">
+    <h2>Result</h2>
+    <p id="result"></p>
+    <button onclick="closePopup()">Close</button>
+  </div>
+
   <script>
+    function showPopup(content) {
+      document.getElementById("result").innerHTML = content;
+      document.getElementById("popup").style.display = "block";
+    }
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
     document.getElementById('likeForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const uid = document.getElementById('uid').value.trim();
-      const res = await fetch(`/api/likes/${uid}`);
-      const data = await res.json();
-      alert(JSON.stringify(data));
+
+      try {
+        const res = await fetch(`/api/likes/${uid}`);
+        const data = await res.json();
+
+        if (data.status === 200) {
+          showPopup(`
+            <b>Nickname:</b> ${data.nickname}<br>
+            <b>UID:</b> ${data.uid}<br>
+            <b>Likes Before:</b> ${data.likes_before}<br>
+            <b>Likes Sent:</b> ${data.likes_sent}<br>
+            <b>Likes After:</b> ${data.likes_after}
+          `);
+        } else {
+          showPopup("Error: " + (data.message || "Unknown error"));
+        }
+      } catch (err) {
+        showPopup("Error fetching likes");
+      }
     });
   </script>
 </body>
